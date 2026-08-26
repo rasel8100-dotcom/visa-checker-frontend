@@ -1,183 +1,390 @@
-// ===============================================
-// 🌐 Configuration
-// ===============================================
+:root {
+    --primary: #667eea;
+    --secondary: #764ba2;
+    --success: #27ae60;
+    --danger: #e74c3c;
+    --warning: #f39c12;
+    --text-dark: #2c3e50;
+    --text-light: #7f8c8d;
+    --bg-light: #f8f9fa;
+    --border-color: #e0e0e0;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
 
-// আপনার Backend API URL এখানে রাখুন
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-// Status Badge Configuration
-const STATUS_CONFIG = {
-    'Approved': 'approved',
-    'Pending': 'pending',
-    'Rejected': 'rejected',
-    'Processing': 'processing'
-};
+html {
+    scroll-behavior: smooth;
+}
 
-// ===============================================
-// 🔍 Main Search Function
-// ===============================================
+body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    color: var(--text-dark);
+}
 
-async function searchVisa() {
-    const appId = document.getElementById('appId').value.trim().toUpperCase();
-    const passportNo = document.getElementById('passportNo').value.trim().toUpperCase();
-    
-    const resultDiv = document.getElementById('result');
-    const errorDiv = document.getElementById('error');
-    const loadingDiv = document.getElementById('loading');
-    
-    // Reset previous results
-    resultDiv.classList.add('hidden');
-    errorDiv.classList.add('hidden');
-    
-    // Validation
-    if (!appId || !passportNo) {
-        showError('❌ অনুগ্রহ করে সব ফিল্ড পূরণ করুন!');
-        return;
+.container {
+    width: 100%;
+    max-width: 550px;
+}
+
+.card {
+    background: white;
+    padding: 45px;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    animation: slideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
     }
-    
-    // Show loading
-    loadingDiv.classList.remove('hidden');
-    
-    try {
-        // Make API Request
-        const response = await fetch(`${API_URL}/api/search`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-                appId: appId,
-                passportNo: passportNo
-            })
-        });
-        
-        // Handle HTTP errors
-        if (!response.ok) {
-            if (response.status === 404) {
-                throw new Error('API endpoint not found');
-            } else if (response.status === 500) {
-                throw new Error('Server error. Please try again later.');
-            } else {
-                throw new Error(`Server error: ${response.status}`);
-            }
-        }
-        
-        const data = await response.json();
-        
-        // Hide loading
-        loadingDiv.classList.add('hidden');
-        
-        // Process response
-        if (data.status === 'success') {
-            displaySuccessResult(data.data || data.applicant || data);
-        } else {
-            showError(`❌ ${data.message || 'কোনো রেকর্ড পাওয়া যায়নি'}`);
-        }
-        
-    } catch (error) {
-        console.error('Error:', error);
-        loadingDiv.classList.add('hidden');
-        
-        // User-friendly error messages
-        if (error.message.includes('fetch')) {
-            showError('❌ সার্ভারের সাথে সংযোগ করতে পারছি না। অনুগ্রহ করে আবার চেষ্টা করুন।');
-        } else if (error.message.includes('JSON')) {
-            showError('❌ সার্ভার থেকে অবৈধ প্রতিক্রিয়া পাওয়া গেছে।');
-        } else {
-            showError(`❌ ত্রুটি: ${error.message}`);
-        }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
-// ===============================================
-// ✅ Display Success Result
-// ===============================================
-
-function displaySuccessResult(data) {
-    // Extract data (handle different response formats)
-    const appId = data.app_id || data.appId || 'N/A';
-    const name = data.applicant_name || data.applicantName || 'N/A';
-    const passport = data.passport_no || data.passportNo || 'N/A';
-    const status = data.status || 'Pending';
-    const date = data.created_at || data.createdAt || 'N/A';
-    
-    // Update result elements
-    document.getElementById('resultAppId').textContent = appId;
-    document.getElementById('resultName').textContent = name;
-    document.getElementById('resultPassport').textContent = passport;
-    document.getElementById('resultDate').textContent = formatDate(date);
-    
-    // Update status badge with appropriate styling
-    const statusBadge = document.getElementById('resultStatus');
-    statusBadge.textContent = status;
-    statusBadge.className = `status-badge ${STATUS_CONFIG[status] || 'pending'}`;
-    
-    // Show result, hide error
-    document.getElementById('result').classList.remove('hidden');
-    document.getElementById('error').classList.add('hidden');
+.header {
+    text-align: center;
+    margin-bottom: 35px;
 }
 
-// ===============================================
-// ❌ Show Error Message
-// ===============================================
-
-function showError(message) {
-    const errorDiv = document.getElementById('error');
-    const errorText = document.getElementById('errorText');
-    
-    errorText.textContent = message;
-    errorDiv.classList.remove('hidden');
-    document.getElementById('result').classList.add('hidden');
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
-// ===============================================
-// 🛠️ Utility Functions
-// ===============================================
+.subtitle {
+    color: var(--text-light);
+    font-size: 0.95em;
+    font-weight: 400;
+}
 
-function formatDate(dateStr) {
-    if (!dateStr || dateStr === 'N/A') return 'N/A';
-    
-    try {
-        const date = new Date(dateStr);
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        return date.toLocaleDateString('bn-BD', options);
-    } catch (e) {
-        return dateStr;
+.search-form {
+    margin-bottom: 30px;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--text-dark);
+    font-weight: 600;
+    font-size: 0.95em;
+}
+
+input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 1em;
+    transition: all 0.3s ease;
+    background: white;
+    color: var(--text-dark);
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    transform: translateY(-2px);
+}
+
+input::placeholder {
+    color: #bbb;
+}
+
+.btn-search {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.05em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-search:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.btn-search:active {
+    transform: translateY(-1px);
+}
+
+.btn-search:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Loading State */
+.loading {
+    text-align: center;
+    padding: 40px 20px;
+    margin-top: 30px;
+}
+
+.loading.hidden {
+    display: none;
+}
+
+.spinner {
+    border: 4px solid var(--bg-light);
+    border-top: 4px solid var(--primary);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading p {
+    color: var(--text-light);
+    font-size: 0.95em;
+    margin-top: 10px;
+}
+
+/* Result Container */
+.result-container {
+    margin-top: 30px;
+    animation: fadeIn 0.3s ease;
+}
+
+.result-container.hidden {
+    display: none;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
-// ===============================================
-// 🎯 Event Listeners
-// ===============================================
-
-// Allow searching by pressing Enter
-document.addEventListener('DOMContentLoaded', () => {
-    const inputs = document.querySelectorAll('#appId, #passportNo');
-    inputs.forEach(input => {
-        input.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                searchVisa();
-            }
-        });
-    });
-});
-
-// Auto-focus on App ID input when page loads
-window.addEventListener('load', () => {
-    document.getElementById('appId').focus();
-});
-
-// ===============================================
-// 📱 PWA Support (Optional)
-// ===============================================
-
-if ('serviceWorker' in navigator) {
-    // Service Worker registration code can go here
-    // for offline support in future
+.result-success {
+    background: #f0fdf4;
+    border: 2px solid #86efac;
+    border-radius: 12px;
+    padding: 25px;
 }
 
-// Log version info
-console.log('🛂 Visa Checker Frontend Loaded');
-console.log('API URL:', API_URL);
+.result-success h3 {
+    color: var(--success);
+    margin-bottom: 20px;
+    font-size: 1.2em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.result-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(132, 204, 22, 0.2);
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: 600;
+    color: var(--text-dark);
+    font-size: 0.95em;
+}
+
+.info-value {
+    color: var(--text-light);
+    text-align: right;
+    max-width: 50%;
+    word-break: break-word;
+}
+
+.status-row .info-value {
+    text-align: right;
+}
+
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.85em;
+    display: inline-block;
+}
+
+.status-badge.approved {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.status-badge.pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-badge.rejected {
+    background: #fee2e2;
+    color: #7f1d1d;
+}
+
+.status-badge.processing {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.btn-new-search {
+    width: 100%;
+    padding: 10px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-new-search:hover {
+    background: var(--secondary);
+    transform: translateY(-2px);
+}
+
+/* Error Message */
+.error-message {
+    margin-top: 30px;
+    padding: 20px;
+    background: #fef2f2;
+    border: 2px solid #fecaca;
+    border-radius: 12px;
+    color: var(--danger);
+    text-align: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.error-message.hidden {
+    display: none;
+}
+
+.error-message p {
+    font-size: 0.95em;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Footer */
+.footer {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.footer-text {
+    font-size: 0.8em;
+    color: var(--text-light);
+    line-height: 1.5;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .card {
+        padding: 30px 20px;
+    }
+    
+    h1 {
+        font-size: 2em;
+    }
+    
+    .subtitle {
+        font-size: 0.9em;
+    }
+    
+    .info-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .info-value {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        padding: 20px;
+    }
+    
+    h1 {
+        font-size: 1.8em;
+    }
+    
+    .header {
+        margin-bottom: 25px;
+    }
+    
+    .form-group {
+        margin-bottom: 18px;
+    }
+}
+
+/* Utility Classes */
+.hidden {
+    display: none !important;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
