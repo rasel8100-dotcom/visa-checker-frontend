@@ -16,7 +16,7 @@
                 <p class="subtitle">আপনার আবেদন ট্র্যাক করুন এবং স্ট্যাটাস জানুন</p>
             </div>
             
-            <form class="search-form">
+            <form class="search-form" onsubmit="handleFormSubmit(event)">
                 <div class="form-group">
                     <label for="appId">আবেদন আইডি *</label>
                     <input 
@@ -39,7 +39,7 @@
                     >
                 </div>
                 
-                <button type="button" onclick="searchVisa()" class="btn-search">
+                <button type="submit" class="btn-search" id="searchBtn">
                     🔍 খুঁজুন
                 </button>
             </form>
@@ -76,6 +76,7 @@
                             <span id="resultDate" class="info-value">-</span>
                         </div>
                     </div>
+                    <button class="btn-new-search" onclick="resetForm()">নতুন অনুসন্ধান</button>
                 </div>
             </div>
             
@@ -86,7 +87,7 @@
             
             <!-- Footer -->
             <div class="footer">
-                <p class="footer-text">এই সেবা শুধুমাত্র তথ্য প্রদানের জন্য। সরকারি সিদ্ধান্তের জন্য অফিশিয়াল চ্যানেল ব্যবহার করুন।</p>
+                <p class="footer-text">এই সেবা শুধুমাত্র তথ্য প্রদানের জন্য। সঠিক তথ্যের জন্য অফিশিয়াল চ্যানেল ব্যবহার করুন।</p>
             </div>
         </div>
     </div>
