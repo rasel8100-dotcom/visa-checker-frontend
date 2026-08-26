@@ -1,0 +1,28 @@
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Vercel
+.vercel/
+.next/
+
+# Node (if you add node_modules later)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+
+# Build
+dist/
+build/
+
+# Logs
+*.log
