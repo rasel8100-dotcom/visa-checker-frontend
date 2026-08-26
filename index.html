@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ভিসা আবেদন ট্র্যাকার - আপনার আবেদনের অবস্থা জানুন">
+    <title>🛂 ভিসা চেকার - আবেদন ট্র্যাকার</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛂</text></svg>">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <h1>🛂 ভিসা চেকার</h1>
+                <p class="subtitle">আপনার আবেদন ট্র্যাক করুন এবং স্ট্যাটাস জানুন</p>
+            </div>
+            
+            <form class="search-form">
+                <div class="form-group">
+                    <label for="appId">আবেদন আইডি *</label>
+                    <input 
+                        type="text" 
+                        id="appId" 
+                        placeholder="যেমন: APP123456"
+                        autocomplete="off"
+                        required
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="passportNo">পাসপোর্ট নম্বর *</label>
+                    <input 
+                        type="text" 
+                        id="passportNo" 
+                        placeholder="যেমন: AA1234567"
+                        autocomplete="off"
+                        required
+                    >
+                </div>
+                
+                <button type="button" onclick="searchVisa()" class="btn-search">
+                    🔍 খুঁজুন
+                </button>
+            </form>
+            
+            <!-- Loading State -->
+            <div id="loading" class="loading hidden">
+                <div class="spinner"></div>
+                <p>অনুসন্ধান করছি...</p>
+            </div>
+            
+            <!-- Success Result -->
+            <div id="result" class="result-container hidden">
+                <div class="result-success">
+                    <h3>✅ আবেদন পাওয়া গেছে</h3>
+                    <div class="result-info">
+                        <div class="info-row">
+                            <span class="info-label">আবেদন আইডি:</span>
+                            <span id="resultAppId" class="info-value">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">আবেদনকারীর নাম:</span>
+                            <span id="resultName" class="info-value">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">পাসপোর্ট নম্বর:</span>
+                            <span id="resultPassport" class="info-value">-</span>
+                        </div>
+                        <div class="info-row status-row">
+                            <span class="info-label">বর্তমান স্ট্যাটাস:</span>
+                            <span id="resultStatus" class="status-badge">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">আবেদনের তারিখ:</span>
+                            <span id="resultDate" class="info-value">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Error Message -->
+            <div id="error" class="error-message hidden">
+                <p id="errorText">❌ কোনো রেকর্ড পাওয়া যায়নি</p>
+            </div>
+            
+            <!-- Footer -->
+            <div class="footer">
+                <p class="footer-text">এই সেবা শুধুমাত্র তথ্য প্রদানের জন্য। সরকারি সিদ্ধান্তের জন্য অফিশিয়াল চ্যানেল ব্যবহার করুন।</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
